@@ -85,8 +85,8 @@ export const PriorityBadge: React.FC<{ priority: PriorityRank }> = ({ priority }
 
 /**
  * PageHeader Primitive
- * Standardized top block with breadcrumb, text-2xl font-semibold tracking-tight text-[#172B2A],
- * 1-sentence subtitle, and right-aligned action buttons.
+ * Standardized top block with breadcrumb, text-xl lg:text-2xl font-semibold tracking-tight text-[#172B2A],
+ * concise 1-sentence subtitle, and right-aligned action buttons that never crush the title.
  */
 export const PageHeader: React.FC<{
   breadcrumb: string;
@@ -95,15 +95,15 @@ export const PageHeader: React.FC<{
   actions?: React.ReactNode;
 }> = ({ breadcrumb, title, subtitle, actions }) => {
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-2 border-b border-[#D9DFDA] no-print">
-      <div className="space-y-1">
-        <div className="text-xs font-medium text-[#52615D] tracking-wide">
+    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 pb-5 border-b border-[#D9DFDA] no-print">
+      <div className="max-w-2xl min-w-0">
+        <div className="text-xs font-medium text-[#52615D] tracking-wide truncate">
           {breadcrumb}
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-[#172B2A]">
+        <h1 className="text-xl lg:text-2xl font-semibold tracking-tight text-[#172B2A] mt-0.5">
           {title}
         </h1>
-        <p className="text-sm text-[#52615D] max-w-2xl">{subtitle}</p>
+        <p className="text-sm text-[#52615D] mt-1">{subtitle}</p>
       </div>
       {actions && (
         <div className="flex flex-wrap items-center gap-2.5 shrink-0">{actions}</div>
@@ -114,7 +114,7 @@ export const PageHeader: React.FC<{
 
 /**
  * StatCard Primitive
- * Compact metric card (p-5 bg-white border border-[#D9DFDA] rounded-xl)
+ * Compact metric card with single-line tabular-nums discipline so currency/metrics never wrap awkwardly.
  */
 export const StatCard: React.FC<{
   label: string;
@@ -123,18 +123,18 @@ export const StatCard: React.FC<{
   icon?: React.ReactNode;
 }> = ({ label, value, subLabel, icon }) => {
   return (
-    <div className="p-5 bg-white border border-[#D9DFDA] rounded-xl shadow-xs flex flex-col justify-between">
+    <div className="p-5 bg-white border border-[#D9DFDA] rounded-xl shadow-xs flex flex-col justify-between min-w-0">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-medium uppercase tracking-wider text-[#52615D]">
+        <span className="text-xs font-medium uppercase tracking-wider text-[#52615D] truncate">
           {label}
         </span>
         {icon && <span className="text-[#17635C] shrink-0">{icon}</span>}
       </div>
-      <div className="text-2xl font-bold tabular-nums text-[#172B2A] mt-1">
+      <div className="text-xl xl:text-2xl font-bold font-mono tabular-nums tracking-tight text-[#172B2A] whitespace-nowrap truncate mt-1">
         {value}
       </div>
       {subLabel && (
-        <div className="mt-2 text-xs text-[#52615D] flex items-center gap-1.5">
+        <div className="mt-2 text-xs text-[#52615D] flex items-center gap-1.5 truncate">
           {subLabel}
         </div>
       )}
@@ -144,7 +144,7 @@ export const StatCard: React.FC<{
 
 /**
  * ResponsiveDataView (CRITICAL TABLE-TO-CARD ADAPTER)
- * - Desktop (>=1024px): Clean table inside bg-white border border-[#D9DFDA] rounded-xl
+ * - Desktop (>=1024px): Clean table-auto inside bg-white border border-[#D9DFDA] rounded-xl
  * - Mobile/Tablet (<1024px): Stacked cards in grid-cols-1 md:grid-cols-2 gap-4 lg:hidden
  */
 export interface ResponsiveColumn<T> {
@@ -182,13 +182,13 @@ export function ResponsiveDataView<T>({
     <>
       {/* Desktop Table (>= 1024px) */}
       <div className="hidden lg:block overflow-hidden bg-white border border-[#D9DFDA] rounded-xl shadow-xs">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full table-auto text-left border-collapse">
           <thead>
             <tr className="bg-[#F4F5F1] border-b border-[#D9DFDA]">
               {columns.map((col) => (
                 <th
                   key={col.key}
-                  className={`py-3 px-4 text-xs font-semibold uppercase tracking-wider text-[#52615D] ${
+                  className={`py-2.5 px-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#52615D] whitespace-nowrap ${
                     col.align === 'right'
                       ? 'text-right'
                       : col.align === 'center'
@@ -201,7 +201,7 @@ export function ResponsiveDataView<T>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#D9DFDA] text-sm text-[#172B2A]">
+          <tbody className="divide-y divide-[#D9DFDA] text-xs text-[#172B2A]">
             {data.map((row, idx) => (
               <tr
                 key={keyExtractor(row, idx)}
@@ -213,7 +213,7 @@ export function ResponsiveDataView<T>({
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={`py-3.5 px-4 align-middle ${
+                    className={`py-2.5 px-2.5 align-middle ${
                       col.align === 'right'
                         ? 'text-right tabular-nums'
                         : col.align === 'center'
@@ -250,7 +250,7 @@ export function ResponsiveDataView<T>({
 
 /**
  * AppShell Component
- * Implements Desktop fixed left sidebar + sticky context top bar,
+ * Implements Desktop fixed left sidebar + clean sticky context top bar,
  * and Mobile/Tablet compact top bar + 5-item bottom navigation bar.
  */
 interface NavItemConfig {
@@ -333,7 +333,7 @@ export const AppShell: React.FC<{
   const mobileBottomItems = NAV_ITEMS.filter((item) => item.mobileBar);
 
   return (
-    <div className="min-h-screen bg-[#F4F5F1] text-[#172B2A] lg:flex">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#F4F5F1] text-[#172B2A] lg:flex">
       {/* Desktop Fixed Left Sidebar */}
       <aside className="hidden lg:flex lg:w-64 lg:fixed lg:inset-y-0 lg:left-0 bg-white border-r border-[#D9DFDA] flex-col justify-between z-30 no-print">
         <div>
@@ -415,66 +415,24 @@ export const AppShell: React.FC<{
 
       {/* Main Content Area Wrapper */}
       <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
-        {/* Desktop Sticky Top Context Bar (3-Zone Contract) */}
-        <header className="hidden lg:flex h-16 bg-white/90 backdrop-blur border-b border-[#D9DFDA] px-6 items-center justify-between gap-8 sticky top-0 z-20 no-print">
-          {/* Zone 1: Active Corridor Wordmark */}
-          <div className="text-sm font-semibold text-[#172B2A] whitespace-nowrap shrink-0">
-            {activeRuas
-              ? `${activeRuas.code} · ${activeRuas.name} (STA ${
-                  activeSegment ? activeSegment.staLabel : `0+000 - 0+${activeRuas.staEndM}`
-                })`
-              : 'Koridor Jalan Beta'}
+        {/* Desktop Sticky Top Context Bar */}
+        <header className="hidden lg:flex h-16 bg-white/90 backdrop-blur border-b border-[#D9DFDA] px-6 items-center justify-between gap-6 sticky top-0 z-20 no-print">
+          {/* Left: Active Corridor Badge & Total Length */}
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="text-sm font-semibold text-[#172B2A] truncate">
+              {activeRuas ? `${activeRuas.code} · ${activeRuas.name}` : 'Koridor Jalan Beta'}
+            </span>
+            {activeRuas && (
+              <span className="text-xs font-mono tabular-nums text-[#52615D] whitespace-nowrap shrink-0">
+                · {activeRuas.staEndM - activeRuas.staStartM} m · {activeRuas.segments.length} Segmen
+              </span>
+            )}
           </div>
 
-          {/* Zone 2: Quick Stage Links */}
-          <nav aria-label="Tahapan Alur Kerja" className="flex items-center gap-6 text-xs font-medium text-[#52615D]">
-            <button
-              type="button"
-              onClick={() => onNavigate('input')}
-              className={`hover:text-[#172B2A] transition-colors whitespace-nowrap shrink-0 ${
-                activeView === 'input' ? 'text-[#17635C] font-semibold underline underline-offset-4' : ''
-              }`}
-            >
-              1. Survei Lapangan
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate('kelengkapan')}
-              className={`hover:text-[#172B2A] transition-colors whitespace-nowrap shrink-0 ${
-                activeView === 'kelengkapan' ? 'text-[#17635C] font-semibold underline underline-offset-4' : ''
-              }`}
-            >
-              2. Verifikasi Data
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate('analisis')}
-              className={`hover:text-[#172B2A] transition-colors whitespace-nowrap shrink-0 ${
-                activeView === 'analisis' ? 'text-[#17635C] font-semibold underline underline-offset-4' : ''
-              }`}
-            >
-              3. Parameter Markov
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate('simulasi')}
-              className={`hover:text-[#172B2A] transition-colors whitespace-nowrap shrink-0 ${
-                activeView === 'simulasi' ? 'text-[#17635C] font-semibold underline underline-offset-4' : ''
-              }`}
-            >
-              4. Simulasi Anggaran
-            </button>
-          </nav>
-
-          {/* Zone 3: Primary CTA */}
-          <div className="flex items-center shrink-0">
-            <button
-              type="button"
-              onClick={() => onNavigate('laporan')}
-              className="min-h-[38px] px-4 py-2 rounded-lg text-xs font-medium bg-[#17635C] hover:bg-[#124E48] text-white transition-colors whitespace-nowrap shrink-0"
-            >
-              Cetak Laporan Resmi
-            </button>
+          {/* Right: Compact Local Persistence Indicator */}
+          <div className="flex items-center gap-2 text-xs font-medium text-[#52615D] whitespace-nowrap shrink-0">
+            <CheckCircle2 className="w-4 h-4 text-[#17635C] shrink-0" strokeWidth={1.75} />
+            <span>Data Tersimpan Lokal</span>
           </div>
         </header>
 
@@ -521,7 +479,7 @@ export const AppShell: React.FC<{
         </header>
 
         {/* Scrollable Main Workspace */}
-        <main className="w-full max-w-7xl mx-auto p-4 pb-24 lg:p-8 space-y-4 lg:space-y-6 print-container">
+        <main className="w-full max-w-7xl mx-auto p-4 pb-24 lg:p-8 space-y-4 lg:space-y-6 min-w-0 flex-1 print-container">
           {children}
         </main>
 

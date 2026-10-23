@@ -136,13 +136,13 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
   const columns: ResponsiveColumn<RoadSegment>[] = [
     {
       key: 'sta',
-      header: 'Segmen STA',
+      header: 'STA',
       render: (s) => (
-        <div>
+        <div className="whitespace-nowrap">
           <span className="font-mono font-semibold text-[#172B2A] tabular-nums">
-            STA {s.staLabel}
+            {s.staLabel}
           </span>
-          <span className="block text-xs text-[#52615D]">Segmen #{s.segmentIndex}</span>
+          <span className="block text-[11px] text-[#52615D]">Segmen #{s.segmentIndex}</span>
         </div>
       ),
     },
@@ -151,41 +151,42 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
       header: 'Panjang',
       align: 'right',
       render: (s) => (
-        <span className="font-mono font-medium tabular-nums">{s.lengthM} m</span>
+        <span className="font-mono font-medium tabular-nums whitespace-nowrap">
+          {s.lengthM} m
+        </span>
       ),
     },
     {
       key: 'sdiParams',
-      header: 'Status Pengukuran SDI',
+      header: 'Parameter SDI',
       render: (s) => (
-        <div className="font-mono text-xs tabular-nums text-[#172B2A]">
-          Retak {s.crackAreaPct}% ({s.crackWidthMm}mm) · Lubang {s.potholeCount} · Alur{' '}
-          {s.ruttingDepthCm}cm
+        <div className="font-mono text-[11px] tabular-nums text-[#172B2A] whitespace-nowrap">
+          Retak {s.crackAreaPct}% ({s.crackWidthMm}mm) · Lubang {s.potholeCount} · Alur {s.ruttingDepthCm}cm
         </div>
       ),
     },
     {
       key: 'photos',
-      header: 'Bukti Foto',
+      header: 'Foto',
       align: 'center',
       render: (s) => (
-        <span className="font-mono text-xs tabular-nums text-[#172B2A]">
-          {s.photos.length} foto
+        <span className="font-mono text-xs tabular-nums text-[#172B2A] whitespace-nowrap">
+          {s.photos.length}
         </span>
       ),
     },
     {
       key: 'lhrDrainage',
-      header: 'Data LHR & Drainase',
+      header: 'LHR & Drainase',
       render: (s) => (
-        <div className="text-xs font-mono tabular-nums text-[#52615D]">
-          {s.lhrVehiclesPerDay.toLocaleString('id-ID')} kend/hr · Drainase {s.drainageCondition}
+        <div className="text-xs font-mono tabular-nums text-[#52615D] whitespace-nowrap">
+          {s.lhrVehiclesPerDay.toLocaleString('id-ID')} · {s.drainageCondition}
         </div>
       ),
     },
     {
       key: 'sdiScore',
-      header: 'Skor SDI Sementara',
+      header: 'Skor SDI',
       align: 'right',
       render: (s) => {
         const sdi = calculateSDI({
@@ -196,7 +197,7 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
           segmentLengthM: s.lengthM,
         });
         return (
-          <div className="flex items-center justify-end gap-2">
+          <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
             <span className="font-mono font-bold text-[#172B2A] tabular-nums">
               {sdi.finalSdi.toFixed(1)}
             </span>
@@ -207,33 +208,33 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
     },
     {
       key: 'status',
-      header: 'Status Verifikasi',
+      header: 'Status',
       align: 'center',
       render: (s) =>
         s.verified ? (
-          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800">
-            <CheckCircle2 className="w-3.5 h-3.5" strokeWidth={1.75} />
-            <span>Siap Analisis</span>
+          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800 whitespace-nowrap">
+            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+            <span>Siap</span>
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-800">
-            <Clock className="w-3.5 h-3.5" strokeWidth={1.75} />
-            <span>Perlu Dilengkapi</span>
+          <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-800 whitespace-nowrap">
+            <Clock className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+            <span>Belum</span>
           </span>
         ),
     },
     {
       key: 'action',
-      header: 'Tindakan',
+      header: 'Aksi',
       align: 'right',
       render: (s) => (
         <button
           type="button"
           onClick={() => onOpenSegmentInput(s.id)}
-          className="min-h-[34px] px-3 py-1.5 rounded-lg text-xs font-medium bg-[#F4F5F1] hover:bg-[#D9DFDA]/60 text-[#172B2A] border border-[#D9DFDA] inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
+          className="min-h-[30px] px-2 py-1 rounded-lg text-[11px] font-medium bg-[#F4F5F1] hover:bg-[#D9DFDA]/60 text-[#172B2A] border border-[#D9DFDA] inline-flex items-center gap-1 transition-colors whitespace-nowrap"
         >
-          <Edit3 className="w-3.5 h-3.5" strokeWidth={1.75} />
-          <span>Lengkapi</span>
+          <Edit3 className="w-3 h-3 shrink-0" strokeWidth={1.75} />
+          <span>Edit</span>
         </button>
       ),
     },

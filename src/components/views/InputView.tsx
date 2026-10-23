@@ -286,63 +286,63 @@ export const InputView: React.FC<InputViewProps> = ({
         </div>
       </div>
 
+      {/* Full-Width Sleek Horizontal SDI Live Calculation Banner */}
+      <div className="p-4 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="text-xs font-medium uppercase tracking-wider text-[#52615D]">
+              Kalkulasi Real-Time Surface Distress Index (SDI)
+            </div>
+            <div className="flex items-baseline gap-3 mt-1">
+              <span
+                data-testid="live-sdi-score"
+                className="text-3xl font-bold font-mono tabular-nums text-[#172B2A]"
+              >
+                {liveSdi.finalSdi.toFixed(1)}
+              </span>
+              <span className="text-xs text-[#52615D] font-mono tabular-nums">
+                STA {activeSegment.staLabel} ({activeSegment.lengthM} m)
+              </span>
+            </div>
+          </div>
+          <ConditionBadge condition={liveSdi.condition} />
+        </div>
+
+        {/* 4-Step Deterministic Breakdown Strip */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-[#D9DFDA] text-xs">
+          <div className="p-2.5 rounded-lg bg-[#F4F5F1] flex items-center justify-between gap-2">
+            <span className="text-[#52615D]">Tahap 1 (Luas Retak)</span>
+            <span className="font-mono font-semibold text-[#172B2A] tabular-nums whitespace-nowrap">
+              SDI-1 = {liveSdi.sdi1.toFixed(1)}
+            </span>
+          </div>
+          <div className="p-2.5 rounded-lg bg-[#F4F5F1] flex items-center justify-between gap-2">
+            <span className="text-[#52615D]">Tahap 2 (Lebar Retak)</span>
+            <span className="font-mono font-semibold text-[#172B2A] tabular-nums whitespace-nowrap">
+              SDI-2 = {liveSdi.sdi2.toFixed(1)}
+            </span>
+          </div>
+          <div className="p-2.5 rounded-lg bg-[#F4F5F1] flex items-center justify-between gap-2">
+            <span className="text-[#52615D]">
+              Tahap 3 ({liveSdi.potholesPer100m}/100m)
+            </span>
+            <span className="font-mono font-semibold text-[#172B2A] tabular-nums whitespace-nowrap">
+              SDI-3 = {liveSdi.sdi3.toFixed(1)}
+            </span>
+          </div>
+          <div className="p-2.5 rounded-lg bg-[#F4F5F1] flex items-center justify-between gap-2">
+            <span className="text-[#52615D]">Tahap 4 (Alur Roda)</span>
+            <span className="font-mono font-semibold text-[#17635C] tabular-nums whitespace-nowrap">
+              SDI-4 = {liveSdi.sdi4.toFixed(1)}
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* 2-Column Asymmetric Desktop Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column (lg:col-span-7 — Pengukuran SDI & Teknis) */}
-        <div className="lg:col-span-7 space-y-6">
-          {/* Real-time SDI Score Preview Bar */}
-          <div className="p-5 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <div className="text-xs font-medium uppercase tracking-wider text-[#52615D]">
-                  Kalkulasi Real-Time Surface Distress Index (SDI)
-                </div>
-                <div className="flex items-baseline gap-3 mt-1">
-                  <span
-                    data-testid="live-sdi-score"
-                    className="text-3xl font-bold font-mono tabular-nums text-[#172B2A]"
-                  >
-                    {liveSdi.finalSdi.toFixed(1)}
-                  </span>
-                  <span className="text-xs text-[#52615D] font-mono tabular-nums">
-                    STA {activeSegment.staLabel} ({activeSegment.lengthM} m)
-                  </span>
-                </div>
-              </div>
-              <ConditionBadge condition={liveSdi.condition} />
-            </div>
-
-            {/* 4-Step Deterministic Breakdown Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-[#D9DFDA] text-xs">
-              <div className="p-2.5 rounded-lg bg-[#F4F5F1]">
-                <span className="text-[#52615D] block">Tahap 1 (Luas Retak)</span>
-                <span className="font-mono font-semibold text-[#172B2A] tabular-nums">
-                  SDI-1 = {liveSdi.sdi1.toFixed(1)}
-                </span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-[#F4F5F1]">
-                <span className="text-[#52615D] block">Tahap 2 (Lebar Retak)</span>
-                <span className="font-mono font-semibold text-[#172B2A] tabular-nums">
-                  SDI-2 = {liveSdi.sdi2.toFixed(1)}
-                </span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-[#F4F5F1]">
-                <span className="text-[#52615D] block">
-                  Tahap 3 ({liveSdi.potholesPer100m}/100m)
-                </span>
-                <span className="font-mono font-semibold text-[#172B2A] tabular-nums">
-                  SDI-3 = {liveSdi.sdi3.toFixed(1)}
-                </span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-[#F4F5F1]">
-                <span className="text-[#52615D] block">Tahap 4 (Alur Roda)</span>
-                <span className="font-mono font-semibold text-[#17635C] tabular-nums">
-                  SDI-4 = {liveSdi.sdi4.toFixed(1)}
-                </span>
-              </div>
-            </div>
-          </div>
-
+        <div className="lg:col-span-7 space-y-6 min-w-0">
           {/* 4 Core SDI Inputs Card */}
           <div className="p-5 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-5">
             <h2 className="text-base font-semibold text-[#172B2A]">
@@ -539,9 +539,9 @@ export const InputView: React.FC<InputViewProps> = ({
                 </p>
               </div>
               {isAccordionOpen ? (
-                <ChevronUp className="w-4 h-4 text-[#52615D]" strokeWidth={1.75} />
+                <ChevronUp className="w-4 h-4 text-[#52615D] shrink-0" strokeWidth={1.75} />
               ) : (
-                <ChevronDown className="w-4 h-4 text-[#52615D]" strokeWidth={1.75} />
+                <ChevronDown className="w-4 h-4 text-[#52615D] shrink-0" strokeWidth={1.75} />
               )}
             </button>
 
@@ -669,51 +669,57 @@ export const InputView: React.FC<InputViewProps> = ({
         </div>
 
         {/* Right Column (lg:col-span-5 — Bukti Foto & Bantuan AI) */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-6 min-w-0">
           {/* Bukti Foto Lapangan Card */}
           <div className="p-5 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
                 <h2 className="text-base font-semibold text-[#172B2A]">
                   Bukti Foto & Dokumentasi Segmen
                 </h2>
-                <p className="text-xs text-[#52615D]">
-                  Unggah foto lapangan atau buat diagram visual kerusakan STA {activeSegment.staLabel}
+                <p className="text-xs text-[#52615D] mt-0.5">
+                  Unggah foto lapangan atau buat diagram visual STA {activeSegment.staLabel}
                 </p>
               </div>
-              <span className="font-mono text-xs font-semibold text-[#17635C] tabular-nums">
+              <span className="font-mono text-xs font-semibold text-[#17635C] tabular-nums whitespace-nowrap shrink-0">
                 {activeSegment.photos.length} Foto
               </span>
             </div>
 
-            {/* Metadata Input before adding photo */}
+            {/* Metadata Input before adding photo (Stacked cleanly so select never truncates) */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              <div className="sm:col-span-2">
-                <label htmlFor="photo-caption-input" className="sr-only">
-                  Keterangan Foto
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="photo-caption-input"
+                  className="block text-xs font-medium text-[#172B2A] mb-1"
+                >
+                  Keterangan Foto Lapangan
                 </label>
                 <input
                   id="photo-caption-input"
                   type="text"
                   value={photoCaption}
                   onChange={(e) => setPhotoCaption(e.target.value)}
-                  placeholder="Keterangan foto (misal: Lubang jalur kiri STA 0+140)"
+                  placeholder="Misal: Lubang jalur kiri STA 0+140"
                   className="w-full px-3 py-2 text-xs bg-white border border-[#D9DFDA] rounded-lg focus:outline-none focus:border-[#17635C]"
                 />
               </div>
-              <div>
-                <label htmlFor="photo-direction-select" className="sr-only">
-                  Arah Pandang
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="photo-direction-select"
+                  className="block text-xs font-medium text-[#172B2A] mb-1"
+                >
+                  Arah Pandang Dokumentasi
                 </label>
                 <select
                   id="photo-direction-select"
                   value={photoDirection}
                   onChange={(e) => setPhotoDirection(e.target.value as DirectionTag)}
-                  className="w-full px-2.5 py-2 text-xs bg-white border border-[#D9DFDA] rounded-lg focus:outline-none focus:border-[#17635C]"
+                  className="w-full px-3 py-2 text-xs bg-white border border-[#D9DFDA] rounded-lg focus:outline-none focus:border-[#17635C]"
                 >
-                  <option value="Arah Normal">Arah Normal</option>
-                  <option value="Arah Sebaliknya">Arah Sebaliknya</option>
-                  <option value="Potongan Melintang">Potongan Melintang</option>
+                  <option value="Arah Normal">Arah Normal (Menuju STA Akhir)</option>
+                  <option value="Arah Sebaliknya">Arah Sebaliknya (Menuju STA Awal)</option>
+                  <option value="Potongan Melintang">Potongan Melintang Jalan</option>
                 </select>
               </div>
             </div>
@@ -731,18 +737,18 @@ export const InputView: React.FC<InputViewProps> = ({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="min-h-[42px] px-3 py-2.5 rounded-lg border border-dashed border-[#17635C] bg-[#F4F5F1]/60 hover:bg-[#F4F5F1] text-xs font-medium text-[#172B2A] inline-flex items-center justify-center gap-2 transition-colors"
+                className="min-h-[40px] px-3 py-2 rounded-lg border border-dashed border-[#17635C] bg-[#F4F5F1]/60 hover:bg-[#F4F5F1] text-xs font-medium text-[#172B2A] inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap"
               >
-                <Camera className="w-4 h-4 text-[#17635C]" strokeWidth={1.75} />
-                <span>Unggah Foto Lapangan</span>
+                <Camera className="w-4 h-4 text-[#17635C] shrink-0" strokeWidth={1.75} />
+                <span>Unggah Foto</span>
               </button>
               <button
                 type="button"
                 onClick={handleGenerateTechnicalIllustrationPhoto}
-                className="min-h-[42px] px-3 py-2.5 rounded-lg border border-[#D9DFDA] bg-white hover:bg-[#F4F5F1] text-xs font-medium text-[#172B2A] inline-flex items-center justify-center gap-2 transition-colors"
+                className="min-h-[40px] px-3 py-2 rounded-lg border border-[#D9DFDA] bg-white hover:bg-[#F4F5F1] text-xs font-medium text-[#172B2A] inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap"
               >
-                <Plus className="w-4 h-4 text-[#17635C]" strokeWidth={1.75} />
-                <span>Tambah Ilustrasi Teknis STA</span>
+                <Plus className="w-4 h-4 text-[#17635C] shrink-0" strokeWidth={1.75} />
+                <span>Ilustrasi Teknis STA</span>
               </button>
             </div>
 
@@ -777,7 +783,7 @@ export const InputView: React.FC<InputViewProps> = ({
                       <div className="text-xs font-semibold text-[#172B2A] truncate">
                         {photo.caption}
                       </div>
-                      <div className="text-[11px] text-[#52615D] mt-0.5">
+                      <div className="text-[11px] text-[#52615D] mt-0.5 truncate">
                         {photo.direction} · {photo.capturedAt}
                       </div>
                     </div>
@@ -785,7 +791,7 @@ export const InputView: React.FC<InputViewProps> = ({
                       type="button"
                       aria-label={`Hapus foto ${photo.caption}`}
                       onClick={() => handleRemovePhoto(photo.id)}
-                      className="p-1.5 text-[#52615D] hover:text-rose-700 rounded-md"
+                      className="p-1.5 text-[#52615D] hover:text-rose-700 rounded-md shrink-0"
                     >
                       <Trash2 className="w-4 h-4" strokeWidth={1.75} />
                     </button>

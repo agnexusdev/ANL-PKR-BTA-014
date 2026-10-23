@@ -61,8 +61,8 @@ export const LaporanView: React.FC<LaporanViewProps> = ({
       />
 
       {/* Report Scope Selector & Controls Bar (Hidden in Print) */}
-      <div className="p-4 bg-white border border-[#D9DFDA] rounded-xl shadow-xs flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 no-print">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#F4F5F1] rounded-lg">
+      <div className="p-4 bg-white border border-[#D9DFDA] rounded-xl shadow-xs flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 no-print">
+        <div className="inline-flex flex-wrap items-center bg-[#F4F5F1] p-1 rounded-lg gap-1 self-start">
           <button
             type="button"
             onClick={() => setScope('eksekutif')}
@@ -99,7 +99,7 @@ export const LaporanView: React.FC<LaporanViewProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-4">
-          <label className="inline-flex items-center gap-2 text-xs font-medium text-[#172B2A] cursor-pointer select-none">
+          <label className="inline-flex items-center gap-2 text-xs font-medium text-[#172B2A] cursor-pointer select-none whitespace-nowrap">
             <input
               type="checkbox"
               checked={includePhotos}

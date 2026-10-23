@@ -193,44 +193,52 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
   const comparisonColumns: ResponsiveColumn<SegmentComparisonRow>[] = [
     {
       key: 'sta',
-      header: 'Segmen STA',
+      header: 'STA',
       render: (r) => (
-        <span className="font-mono font-semibold text-[#172B2A] tabular-nums">
-          STA {r.staLabel} ({r.lengthM}m)
-        </span>
+        <div className="whitespace-nowrap">
+          <div className="font-mono font-semibold text-[#172B2A] tabular-nums">
+            {r.staLabel}
+          </div>
+          <div className="text-[11px] font-mono text-[#52615D] tabular-nums">
+            {r.lengthM} m · {r.priorityRank}
+          </div>
+        </div>
       ),
     },
     {
       key: 'condition',
-      header: 'Kondisi & Prioritas',
+      header: 'Kondisi',
       render: (r) => (
-        <div className="flex items-center gap-2">
-          <PriorityBadge priority={r.priorityRank} />
+        <div className="whitespace-nowrap">
           <ConditionBadge condition={r.condition} size="sm" />
         </div>
       ),
     },
     {
       key: 'treatment',
-      header: 'Program Penanganan',
-      render: (r) => <span className="font-medium text-[#172B2A]">{r.treatment}</span>,
+      header: 'Program',
+      render: (r) => (
+        <span className="font-medium text-[#172B2A] text-xs leading-snug">
+          {r.treatment}
+        </span>
+      ),
     },
     {
       key: 'baseCost',
-      header: 'Biaya Baseline',
+      header: 'Baseline',
       align: 'right',
       render: (r) => (
-        <span className="font-mono tabular-nums text-[#52615D]">
+        <span className="font-mono tabular-nums text-[#52615D] whitespace-nowrap">
           {formatRupiah(r.baselineCostRp)}
         </span>
       ),
     },
     {
       key: 'scnCost',
-      header: 'Biaya Skenario',
+      header: 'Skenario',
       align: 'right',
       render: (r) => (
-        <span className="font-mono font-semibold tabular-nums text-[#172B2A]">
+        <span className="font-mono font-semibold tabular-nums text-[#172B2A] whitespace-nowrap">
           {formatRupiah(r.scenarioCostRp)}
         </span>
       ),
@@ -241,7 +249,7 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
       align: 'right',
       render: (r) => (
         <span
-          className={`font-mono font-semibold tabular-nums ${
+          className={`font-mono font-semibold tabular-nums whitespace-nowrap ${
             r.deltaRp > 0
               ? 'text-rose-700'
               : r.deltaRp < 0
@@ -269,7 +277,7 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
               onClick={handleResetToBaseline}
               className="min-h-[40px] px-4 py-2 rounded-lg text-sm font-medium bg-white hover:bg-[#F4F5F1] text-[#172B2A] border border-[#D9DFDA] inline-flex items-center gap-2 transition-colors whitespace-nowrap"
             >
-              <RotateCcw className="w-4 h-4" strokeWidth={1.75} />
+              <RotateCcw className="w-4 h-4 shrink-0" strokeWidth={1.75} />
               <span>Reset ke Baseline</span>
             </button>
             <button
@@ -277,7 +285,7 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
               onClick={handleSaveCurrentScenario}
               className="min-h-[40px] px-5 py-2 rounded-lg text-sm font-semibold bg-[#17635C] hover:bg-[#124E48] text-white inline-flex items-center gap-2 transition-colors whitespace-nowrap"
             >
-              <Save className="w-4 h-4" strokeWidth={1.75} />
+              <Save className="w-4 h-4 shrink-0" strokeWidth={1.75} />
               <span>Simpan Skenario</span>
             </button>
           </>
@@ -300,7 +308,7 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
       {/* Side-by-Side Split Layout (lg:grid-cols-12) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Control Panel (lg:col-span-4) */}
-        <div className="lg:col-span-4 bg-white border border-[#D9DFDA] rounded-xl p-5 shadow-xs space-y-5">
+        <div className="lg:col-span-4 bg-white border border-[#D9DFDA] rounded-xl p-5 shadow-xs space-y-5 min-w-0">
           <div>
             <h2 className="text-base font-semibold text-[#172B2A]">
               Parameter Variabel Skenario
@@ -469,16 +477,16 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
         </div>
 
         {/* Right Comparison Panel (lg:col-span-8) */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* Baseline vs Scenario Delta Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-5 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-[#52615D]">
-                <span>Selisih Total Biaya 5 Tahun</span>
-                <ArrowRightLeft className="w-4 h-4 text-[#17635C]" strokeWidth={1.75} />
+        <div className="lg:col-span-8 space-y-6 min-w-0">
+          {/* Baseline vs Scenario Delta Cards (Compact p-4 with single-line whitespace-nowrap numbers) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div className="p-4 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-1 min-w-0">
+              <div className="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-[#52615D]">
+                <span className="truncate">Selisih Biaya 5 Thn</span>
+                <ArrowRightLeft className="w-4 h-4 text-[#17635C] shrink-0" strokeWidth={1.75} />
               </div>
               <div
-                className={`text-2xl font-bold font-mono tabular-nums ${
+                className={`text-lg xl:text-xl font-bold font-mono tabular-nums tracking-tight whitespace-nowrap truncate ${
                   costDeltaRp > 0
                     ? 'text-rose-700'
                     : costDeltaRp < 0
@@ -489,23 +497,23 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
                 {costDeltaRp > 0 ? '+' : ''}
                 {formatRupiah(costDeltaRp, true)}
               </div>
-              <div className="text-xs font-mono tabular-nums text-[#52615D]">
-                Baseline {formatRupiah(baselineSnapshot.totalFiveYearBudgetRp, true)} → Skenario{' '}
+              <div className="text-[11px] font-mono tabular-nums text-[#52615D] truncate">
+                {formatRupiah(baselineSnapshot.totalFiveYearBudgetRp, true)} →{' '}
                 {formatRupiah(scenarioFiveYearCostRp, true)}
               </div>
             </div>
 
-            <div className="p-5 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-[#52615D]">
-                <span>Perubahan Kemantapan Thn 5</span>
+            <div className="p-4 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-1 min-w-0">
+              <div className="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-[#52615D]">
+                <span className="truncate">Kemantapan Thn 5</span>
                 {stabilityDeltaPct >= 0 ? (
-                  <TrendingUp className="w-4 h-4 text-emerald-700" strokeWidth={1.75} />
+                  <TrendingUp className="w-4 h-4 text-emerald-700 shrink-0" strokeWidth={1.75} />
                 ) : (
-                  <TrendingDown className="w-4 h-4 text-rose-700" strokeWidth={1.75} />
+                  <TrendingDown className="w-4 h-4 text-rose-700 shrink-0" strokeWidth={1.75} />
                 )}
               </div>
               <div
-                className={`text-2xl font-bold font-mono tabular-nums ${
+                className={`text-lg xl:text-xl font-bold font-mono tabular-nums tracking-tight whitespace-nowrap truncate ${
                   stabilityDeltaPct > 0
                     ? 'text-emerald-800'
                     : stabilityDeltaPct < 0
@@ -513,30 +521,32 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
                     : 'text-[#172B2A]'
                 }`}
               >
-                {stabilityDeltaPct > 0 ? `+${stabilityDeltaPct.toFixed(2)}%` : `${stabilityDeltaPct.toFixed(2)}%`}
+                {stabilityDeltaPct > 0
+                  ? `+${stabilityDeltaPct.toFixed(2)}%`
+                  : `${stabilityDeltaPct.toFixed(2)}%`}
               </div>
-              <div className="text-xs font-mono tabular-nums text-[#52615D]">
-                Baseline {baselineSnapshot.stabilityYear5Pct.toFixed(2)}% → Skenario{' '}
-                {scenarioYear5StabilityPct.toFixed(2)}%
+              <div className="text-[11px] font-mono tabular-nums text-[#52615D] truncate">
+                Baseline {baselineSnapshot.stabilityYear5Pct.toFixed(1)}% → Skenario{' '}
+                {scenarioYear5StabilityPct.toFixed(1)}%
               </div>
             </div>
 
-            <div className="p-5 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-[#52615D]">
-                <span>Kecukupan Pagu Tahun 1</span>
-                <BookmarkCheck className="w-4 h-4 text-[#17635C]" strokeWidth={1.75} />
+            <div className="p-4 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-1 min-w-0">
+              <div className="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-[#52615D]">
+                <span className="truncate">Kebutuhan Tahun 1</span>
+                <BookmarkCheck className="w-4 h-4 text-[#17635C] shrink-0" strokeWidth={1.75} />
               </div>
-              <div className="text-2xl font-bold font-mono tabular-nums text-[#172B2A]">
+              <div className="text-lg xl:text-xl font-bold font-mono tabular-nums tracking-tight text-[#172B2A] whitespace-nowrap truncate">
                 {formatRupiah(scenarioImmediateCostRp, true)}
               </div>
               <div
-                className={`text-xs font-mono tabular-nums font-medium ${
+                className={`text-[11px] font-mono tabular-nums font-medium truncate ${
                   isWithinCap ? 'text-emerald-800' : 'text-rose-700'
                 }`}
               >
                 {isWithinCap
-                  ? `Sisa Pagu: ${formatRupiah(budgetCapRp - scenarioImmediateCostRp)}`
-                  : `Kurang Bayar: ${formatRupiah(scenarioImmediateCostRp - budgetCapRp)}`}
+                  ? `Sisa Pagu: ${formatRupiah(budgetCapRp - scenarioImmediateCostRp, true)}`
+                  : `Defisit: ${formatRupiah(scenarioImmediateCostRp - budgetCapRp, true)}`}
               </div>
             </div>
           </div>
