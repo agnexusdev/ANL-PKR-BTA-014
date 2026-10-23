@@ -104,28 +104,28 @@ export const AnalisisView: React.FC<AnalisisViewProps> = ({
 
   const historyColumns: ResponsiveColumn<AnalysisSnapshot>[] = [
     {
-      key: 'id',
-      header: 'ID Snapshot',
+      key: 'idTime',
+      header: 'ID Snapshot & Waktu',
       render: (a) => (
         <div className="whitespace-nowrap">
           <span className="font-mono font-semibold text-[#172B2A] tabular-nums">
             {a.id}
           </span>
-          <span className="block text-[11px] text-[#52615D] font-mono tabular-nums">
+          <span className="block text-xs text-[#52615D] font-mono tabular-nums mt-0.5">
             Rev #{a.revision} · {new Date(a.createdAt).toLocaleDateString('id-ID')}
           </span>
         </div>
       ),
     },
     {
-      key: 'ruas',
-      header: 'Koridor Ruas',
+      key: 'corridor',
+      header: 'Koridor & Cakupan',
       render: (a) => (
         <div>
           <div className="font-semibold text-[#172B2A] whitespace-nowrap">
             {a.ruasCode} — {a.ruasName}
           </div>
-          <div className="text-xs font-mono tabular-nums text-[#52615D]">
+          <div className="text-xs font-mono tabular-nums text-[#52615D] mt-0.5">
             {a.totalAnalyzedLengthM} m ({a.frozenSegments.length} segmen)
           </div>
         </div>
@@ -146,37 +146,32 @@ export const AnalisisView: React.FC<AnalisisViewProps> = ({
     },
     {
       key: 'stability',
-      header: 'Kemantapan (Thn 0 → 5)',
+      header: 'Proyeksi Kemantapan (Thn 0 → 5)',
       align: 'right',
       render: (a) => (
-        <span className="font-mono text-xs tabular-nums text-[#172B2A] whitespace-nowrap">
+        <span className="font-mono text-xs font-semibold tabular-nums text-[#172B2A] whitespace-nowrap">
           {a.stabilityYear0Pct.toFixed(1)}% → {a.stabilityYear5Pct.toFixed(1)}%
         </span>
       ),
     },
     {
-      key: 'budget',
-      header: 'Kebutuhan 5 Tahun',
+      key: 'budgetAction',
+      header: 'Total Anggaran & Aksi',
       align: 'right',
       render: (a) => (
-        <span className="font-mono font-semibold text-[#172B2A] tabular-nums whitespace-nowrap">
-          {formatRupiah(a.totalFiveYearBudgetRp)}
-        </span>
-      ),
-    },
-    {
-      key: 'action',
-      header: 'Tindakan',
-      align: 'right',
-      render: (a) => (
-        <button
-          type="button"
-          onClick={() => onOpenExistingSnapshot(a.id)}
-          className="min-h-[34px] px-3 py-1.5 rounded-lg text-xs font-medium bg-[#17635C] hover:bg-[#124E48] text-white inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
-        >
-          <FolderOpen className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
-          <span>Buka Snapshot</span>
-        </button>
+        <div className="flex items-center justify-end gap-3 whitespace-nowrap">
+          <span className="font-mono font-bold text-[#172B2A] tabular-nums">
+            {formatRupiah(a.totalFiveYearBudgetRp)}
+          </span>
+          <button
+            type="button"
+            onClick={() => onOpenExistingSnapshot(a.id)}
+            className="min-h-[34px] px-3 py-1.5 rounded-lg text-xs font-medium bg-[#17635C] hover:bg-[#124E48] text-white inline-flex items-center gap-1.5 transition-colors"
+          >
+            <FolderOpen className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+            <span>Buka Hasil</span>
+          </button>
+        </div>
       ),
     },
   ];

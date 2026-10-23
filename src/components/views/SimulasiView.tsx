@@ -193,34 +193,30 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
   const comparisonColumns: ResponsiveColumn<SegmentComparisonRow>[] = [
     {
       key: 'sta',
-      header: 'STA',
+      header: 'STA & Dimensi',
       render: (r) => (
         <div className="whitespace-nowrap">
           <div className="font-mono font-semibold text-[#172B2A] tabular-nums">
             {r.staLabel}
           </div>
-          <div className="text-[11px] font-mono text-[#52615D] tabular-nums">
+          <div className="text-xs font-mono text-[#52615D] tabular-nums mt-0.5">
             {r.lengthM} m · {r.priorityRank}
           </div>
         </div>
       ),
     },
     {
-      key: 'condition',
-      header: 'Kondisi',
+      key: 'conditionProgram',
+      header: 'Kondisi & Program',
       render: (r) => (
-        <div className="whitespace-nowrap">
-          <ConditionBadge condition={r.condition} size="sm" />
+        <div>
+          <div className="whitespace-nowrap">
+            <ConditionBadge condition={r.condition} size="sm" />
+          </div>
+          <div className="font-medium text-[#172B2A] text-xs mt-1">
+            {r.treatment}
+          </div>
         </div>
-      ),
-    },
-    {
-      key: 'treatment',
-      header: 'Program',
-      render: (r) => (
-        <span className="font-medium text-[#172B2A] text-xs leading-snug">
-          {r.treatment}
-        </span>
       ),
     },
     {

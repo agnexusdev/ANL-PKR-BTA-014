@@ -95,15 +95,15 @@ export const PageHeader: React.FC<{
   actions?: React.ReactNode;
 }> = ({ breadcrumb, title, subtitle, actions }) => {
   return (
-    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 pb-5 border-b border-[#D9DFDA] no-print">
-      <div className="max-w-2xl min-w-0">
-        <div className="text-xs font-medium text-[#52615D] tracking-wide truncate">
+    <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-4 pb-5 border-b border-[#D9DFDA] no-print">
+      <div className="min-w-0 flex-1">
+        <div className="text-xs font-medium text-[#52615D] tracking-wide">
           {breadcrumb}
         </div>
         <h1 className="text-xl lg:text-2xl font-semibold tracking-tight text-[#172B2A] mt-0.5">
           {title}
         </h1>
-        <p className="text-sm text-[#52615D] mt-1">{subtitle}</p>
+        <p className="text-sm text-[#52615D] mt-1 max-w-2xl">{subtitle}</p>
       </div>
       {actions && (
         <div className="flex flex-wrap items-center gap-2.5 shrink-0">{actions}</div>
@@ -124,17 +124,17 @@ export const StatCard: React.FC<{
 }> = ({ label, value, subLabel, icon }) => {
   return (
     <div className="p-5 bg-white border border-[#D9DFDA] rounded-xl shadow-xs flex flex-col justify-between min-w-0">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-medium uppercase tracking-wider text-[#52615D] truncate">
+      <div className="flex items-start justify-between gap-2">
+        <span className="text-xs font-medium uppercase tracking-wider text-[#52615D]">
           {label}
         </span>
         {icon && <span className="text-[#17635C] shrink-0">{icon}</span>}
       </div>
-      <div className="text-xl xl:text-2xl font-bold font-mono tabular-nums tracking-tight text-[#172B2A] whitespace-nowrap truncate mt-1">
+      <div className="text-lg xl:text-2xl font-bold font-mono tabular-nums text-[#172B2A] whitespace-nowrap mt-1">
         {value}
       </div>
       {subLabel && (
-        <div className="mt-2 text-xs text-[#52615D] flex items-center gap-1.5 truncate">
+        <div className="mt-2 text-xs text-[#52615D] flex items-center gap-1.5">
           {subLabel}
         </div>
       )}
@@ -144,8 +144,8 @@ export const StatCard: React.FC<{
 
 /**
  * ResponsiveDataView (CRITICAL TABLE-TO-CARD ADAPTER)
- * - Desktop (>=1024px): Clean table-auto inside bg-white border border-[#D9DFDA] rounded-xl
- * - Mobile/Tablet (<1024px): Stacked cards in grid-cols-1 md:grid-cols-2 gap-4 lg:hidden
+ * - Desktop (>=1280px): Clean table-auto inside bg-white border border-[#D9DFDA] rounded-xl
+ * - Mobile/Tablet/Compact Desktop (<1280px): Stacked cards in grid-cols-1 md:grid-cols-2 gap-4 xl:hidden
  */
 export interface ResponsiveColumn<T> {
   key: string;
@@ -180,15 +180,15 @@ export function ResponsiveDataView<T>({
 
   return (
     <>
-      {/* Desktop Table (>= 1024px) */}
-      <div className="hidden lg:block overflow-hidden bg-white border border-[#D9DFDA] rounded-xl shadow-xs">
+      {/* Desktop Table (>= 1280px) */}
+      <div className="hidden xl:block overflow-x-auto bg-white border border-[#D9DFDA] rounded-xl shadow-xs">
         <table className="w-full table-auto text-left border-collapse">
           <thead>
             <tr className="bg-[#F4F5F1] border-b border-[#D9DFDA]">
               {columns.map((col) => (
                 <th
                   key={col.key}
-                  className={`py-2.5 px-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#52615D] whitespace-nowrap ${
+                  className={`py-3 px-3.5 text-xs font-semibold uppercase tracking-wider text-[#52615D] whitespace-nowrap ${
                     col.align === 'right'
                       ? 'text-right'
                       : col.align === 'center'
@@ -201,7 +201,7 @@ export function ResponsiveDataView<T>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#D9DFDA] text-xs text-[#172B2A]">
+          <tbody className="divide-y divide-[#D9DFDA] text-xs lg:text-sm text-[#172B2A]">
             {data.map((row, idx) => (
               <tr
                 key={keyExtractor(row, idx)}
@@ -213,7 +213,7 @@ export function ResponsiveDataView<T>({
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={`py-2.5 px-2.5 align-middle ${
+                    className={`py-3 px-3.5 align-middle ${
                       col.align === 'right'
                         ? 'text-right tabular-nums'
                         : col.align === 'center'
@@ -230,8 +230,8 @@ export function ResponsiveDataView<T>({
         </table>
       </div>
 
-      {/* Mobile / Tablet Card Grid (< 1024px) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:hidden">
+      {/* Mobile / Tablet / Compact Desktop Card Grid (< 1280px) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 xl:hidden">
         {data.map((row, idx) => (
           <div
             key={keyExtractor(row, idx)}

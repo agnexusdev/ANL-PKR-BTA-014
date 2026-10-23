@@ -135,44 +135,31 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
 
   const columns: ResponsiveColumn<RoadSegment>[] = [
     {
-      key: 'sta',
-      header: 'STA',
+      key: 'staLength',
+      header: 'Segmen & Panjang',
       render: (s) => (
         <div className="whitespace-nowrap">
           <span className="font-mono font-semibold text-[#172B2A] tabular-nums">
             {s.staLabel}
           </span>
-          <span className="block text-[11px] text-[#52615D]">Segmen #{s.segmentIndex}</span>
+          <span className="block text-xs font-mono text-[#52615D] tabular-nums mt-0.5">
+            Segmen #{s.segmentIndex} · {s.lengthM} m
+          </span>
         </div>
       ),
     },
     {
-      key: 'length',
-      header: 'Panjang',
-      align: 'right',
+      key: 'sdiPhotos',
+      header: 'Parameter SDI & Foto',
       render: (s) => (
-        <span className="font-mono font-medium tabular-nums whitespace-nowrap">
-          {s.lengthM} m
-        </span>
-      ),
-    },
-    {
-      key: 'sdiParams',
-      header: 'Parameter SDI',
-      render: (s) => (
-        <div className="font-mono text-[11px] tabular-nums text-[#172B2A] whitespace-nowrap">
-          Retak {s.crackAreaPct}% ({s.crackWidthMm}mm) · Lubang {s.potholeCount} · Alur {s.ruttingDepthCm}cm
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="font-mono text-xs tabular-nums text-[#172B2A] whitespace-nowrap">
+            Retak {s.crackAreaPct}% ({s.crackWidthMm}mm) · Lubang {s.potholeCount} · Alur {s.ruttingDepthCm}cm
+          </span>
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-[#F4F5F1] text-[#17635C] border border-[#D9DFDA] whitespace-nowrap">
+            {s.photos.length} Foto
+          </span>
         </div>
-      ),
-    },
-    {
-      key: 'photos',
-      header: 'Foto',
-      align: 'center',
-      render: (s) => (
-        <span className="font-mono text-xs tabular-nums text-[#172B2A] whitespace-nowrap">
-          {s.photos.length}
-        </span>
       ),
     },
     {
@@ -180,13 +167,13 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
       header: 'LHR & Drainase',
       render: (s) => (
         <div className="text-xs font-mono tabular-nums text-[#52615D] whitespace-nowrap">
-          {s.lhrVehiclesPerDay.toLocaleString('id-ID')} · {s.drainageCondition}
+          {s.lhrVehiclesPerDay.toLocaleString('id-ID')} kend/hr · {s.drainageCondition}
         </div>
       ),
     },
     {
       key: 'sdiScore',
-      header: 'Skor SDI',
+      header: 'Skor & Kondisi SDI',
       align: 'right',
       render: (s) => {
         const sdi = calculateSDI({
@@ -197,7 +184,7 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
           segmentLengthM: s.lengthM,
         });
         return (
-          <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
+          <div className="flex items-center justify-end gap-2 whitespace-nowrap">
             <span className="font-mono font-bold text-[#172B2A] tabular-nums">
               {sdi.finalSdi.toFixed(1)}
             </span>
@@ -207,35 +194,31 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
       },
     },
     {
-      key: 'status',
-      header: 'Status',
-      align: 'center',
-      render: (s) =>
-        s.verified ? (
-          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800 whitespace-nowrap">
-            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
-            <span>Siap</span>
-          </span>
-        ) : (
-          <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-800 whitespace-nowrap">
-            <Clock className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
-            <span>Belum</span>
-          </span>
-        ),
-    },
-    {
-      key: 'action',
-      header: 'Aksi',
+      key: 'statusAction',
+      header: 'Status & Aksi',
       align: 'right',
       render: (s) => (
-        <button
-          type="button"
-          onClick={() => onOpenSegmentInput(s.id)}
-          className="min-h-[30px] px-2 py-1 rounded-lg text-[11px] font-medium bg-[#F4F5F1] hover:bg-[#D9DFDA]/60 text-[#172B2A] border border-[#D9DFDA] inline-flex items-center gap-1 transition-colors whitespace-nowrap"
-        >
-          <Edit3 className="w-3 h-3 shrink-0" strokeWidth={1.75} />
-          <span>Edit</span>
-        </button>
+        <div className="flex items-center justify-end gap-2.5 whitespace-nowrap">
+          {s.verified ? (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+              <CheckCircle2 className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+              <span>Siap</span>
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+              <Clock className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+              <span>Belum</span>
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => onOpenSegmentInput(s.id)}
+            className="min-h-[32px] px-2.5 py-1 rounded-lg text-xs font-medium bg-[#F4F5F1] hover:bg-[#D9DFDA]/60 text-[#172B2A] border border-[#D9DFDA] inline-flex items-center gap-1 transition-colors"
+          >
+            <Edit3 className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+            <span>Edit</span>
+          </button>
+        </div>
       ),
     },
   ];
@@ -301,8 +284,8 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
       </div>
 
       {/* Filter Bar + CSV Import/Template Download */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white border border-[#D9DFDA] rounded-xl p-3.5 shadow-xs">
-        <div className="flex items-center gap-1 p-1 bg-[#F4F5F1] rounded-lg">
+      <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 bg-white border border-[#D9DFDA] rounded-xl p-3.5 shadow-xs">
+        <div className="inline-flex flex-wrap items-center gap-1 p-1 bg-[#F4F5F1] rounded-lg self-start">
           <button
             type="button"
             onClick={() => setFilter('all')}
@@ -338,7 +321,7 @@ export const KelengkapanView: React.FC<KelengkapanViewProps> = ({
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <input
             ref={csvInputRef}
             type="file"

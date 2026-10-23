@@ -164,52 +164,34 @@ export const RuasView: React.FC<RuasViewProps> = ({
 
   const columns: ResponsiveColumn<RoadRuas>[] = [
     {
-      key: 'code',
-      header: 'Kode Ruas',
-      render: (r) => (
-        <span className="font-mono font-semibold text-[#172B2A] tabular-nums">
-          {r.code}
-        </span>
-      ),
-    },
-    {
-      key: 'name',
-      header: 'Nama Ruas Jalan',
+      key: 'corridor',
+      header: 'Koridor & Kode Ruas',
       render: (r) => (
         <div>
-          <div className="font-semibold text-[#172B2A]">{r.name}</div>
-          <div className="text-xs text-[#52615D]">Surveyor: {r.surveyorName}</div>
+          <div className="flex items-center gap-2">
+            <span className="font-mono font-bold text-[#17635C] tabular-nums">
+              {r.code}
+            </span>
+            <span className="font-semibold text-[#172B2A]">{r.name}</span>
+          </div>
+          <div className="text-xs text-[#52615D] mt-0.5">
+            Surveyor: {r.surveyorName}
+          </div>
         </div>
       ),
     },
     {
-      key: 'sta',
-      header: 'Rentang STA',
+      key: 'dimensions',
+      header: 'Rentang STA & Dimensi',
       render: (r) => (
-        <span className="font-mono text-xs text-[#172B2A] tabular-nums whitespace-nowrap">
-          {formatStaRange(r.staStartM, r.staEndM)}
-        </span>
-      ),
-    },
-    {
-      key: 'length',
-      header: 'Panjang Aktual',
-      align: 'right',
-      render: (r) => (
-        <div className="font-mono tabular-nums">
-          <span className="font-semibold">{r.staEndM - r.staStartM} m</span>
-          <span className="block text-xs text-[#52615D]">
-            {r.segments.length} segmen
-          </span>
+        <div className="font-mono tabular-nums whitespace-nowrap">
+          <div className="font-semibold text-[#172B2A]">
+            {formatStaRange(r.staStartM, r.staEndM)}
+          </div>
+          <div className="text-xs text-[#52615D] mt-0.5">
+            {r.staEndM - r.staStartM} m ({r.segments.length} segmen) · Lebar {r.widthM.toFixed(1)} m
+          </div>
         </div>
-      ),
-    },
-    {
-      key: 'width',
-      header: 'Lebar',
-      align: 'right',
-      render: (r) => (
-        <span className="font-mono tabular-nums">{r.widthM.toFixed(1)} m</span>
       ),
     },
     {
@@ -217,14 +199,14 @@ export const RuasView: React.FC<RuasViewProps> = ({
       header: 'Periode',
       align: 'center',
       render: (r) => (
-        <span className="font-mono text-xs tabular-nums text-[#52615D]">
+        <span className="font-mono text-xs font-medium tabular-nums text-[#52615D] whitespace-nowrap">
           {r.surveyPeriod}
         </span>
       ),
     },
     {
       key: 'progress',
-      header: 'Progres Pemeriksaan',
+      header: 'Progres Verifikasi',
       render: (r) => {
         const verified = r.segments.filter((s) => s.verified).length;
         const total = r.segments.length;
@@ -249,7 +231,7 @@ export const RuasView: React.FC<RuasViewProps> = ({
     },
     {
       key: 'actions',
-      header: 'Tindakan',
+      header: 'Aksi',
       align: 'right',
       render: (r) => (
         <div className="flex items-center justify-end gap-2">
