@@ -25,6 +25,7 @@ import {
   PriorityBadge,
   ResponsiveColumn,
   ResponsiveDataView,
+  StatCard,
 } from '../ui/Primitives';
 
 interface SimulasiViewProps {
@@ -301,6 +302,83 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
         </div>
       )}
 
+      {/* Full-Width 3-Column Scenario Comparison StatCards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatCard
+          label="Selisih Total Biaya 5 Tahun"
+          value={
+            <span
+              className={
+                costDeltaRp > 0
+                  ? 'text-rose-700'
+                  : costDeltaRp < 0
+                  ? 'text-emerald-800'
+                  : 'text-[#172B2A]'
+              }
+            >
+              {costDeltaRp > 0 ? '+' : ''}
+              {formatRupiah(costDeltaRp, true)}
+            </span>
+          }
+          subLabel={
+            <span className="font-mono tabular-nums">
+              {formatRupiah(baselineSnapshot.totalFiveYearBudgetRp, true)} →{' '}
+              {formatRupiah(scenarioFiveYearCostRp, true)}
+            </span>
+          }
+          icon={<ArrowRightLeft className="w-5 h-5" strokeWidth={1.75} />}
+        />
+
+        <StatCard
+          label="Perubahan Kemantapan Thn 5"
+          value={
+            <span
+              className={
+                stabilityDeltaPct > 0
+                  ? 'text-emerald-800'
+                  : stabilityDeltaPct < 0
+                  ? 'text-rose-700'
+                  : 'text-[#172B2A]'
+              }
+            >
+              {stabilityDeltaPct > 0
+                ? `+${stabilityDeltaPct.toFixed(2)}%`
+                : `${stabilityDeltaPct.toFixed(2)}%`}
+            </span>
+          }
+          subLabel={
+            <span className="font-mono tabular-nums">
+              Baseline {baselineSnapshot.stabilityYear5Pct.toFixed(1)}% → Skenario{' '}
+              {scenarioYear5StabilityPct.toFixed(1)}%
+            </span>
+          }
+          icon={
+            stabilityDeltaPct >= 0 ? (
+              <TrendingUp className="w-5 h-5 text-emerald-700" strokeWidth={1.75} />
+            ) : (
+              <TrendingDown className="w-5 h-5 text-rose-700" strokeWidth={1.75} />
+            )
+          }
+        />
+
+        <StatCard
+          label="Kebutuhan Tahun 1"
+          value={formatRupiah(scenarioImmediateCostRp, true)}
+          subLabel={
+            <span
+              className={`font-mono tabular-nums font-medium ${
+                isWithinCap ? 'text-emerald-800' : 'text-rose-700'
+              }`}
+            >
+              {isWithinCap
+                ? `Sisa Pagu: ${formatRupiah(budgetCapRp - scenarioImmediateCostRp)}`
+                : `Defisit: ${formatRupiah(scenarioImmediateCostRp - budgetCapRp)}`}
+            </span>
+          }
+          icon={<BookmarkCheck className="w-5 h-5" strokeWidth={1.75} />}
+        />
+      </div>
+
       {/* Side-by-Side Split Layout (lg:grid-cols-12) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Control Panel (lg:col-span-4) */}
@@ -474,79 +552,6 @@ export const SimulasiView: React.FC<SimulasiViewProps> = ({
 
         {/* Right Comparison Panel (lg:col-span-8) */}
         <div className="lg:col-span-8 space-y-6 min-w-0">
-          {/* Baseline vs Scenario Delta Cards (Compact p-4 with single-line whitespace-nowrap numbers) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-            <div className="p-4 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-1 min-w-0">
-              <div className="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-[#52615D]">
-                <span className="truncate">Selisih Biaya 5 Thn</span>
-                <ArrowRightLeft className="w-4 h-4 text-[#17635C] shrink-0" strokeWidth={1.75} />
-              </div>
-              <div
-                className={`text-lg xl:text-xl font-bold font-mono tabular-nums tracking-tight whitespace-nowrap truncate ${
-                  costDeltaRp > 0
-                    ? 'text-rose-700'
-                    : costDeltaRp < 0
-                    ? 'text-emerald-800'
-                    : 'text-[#172B2A]'
-                }`}
-              >
-                {costDeltaRp > 0 ? '+' : ''}
-                {formatRupiah(costDeltaRp, true)}
-              </div>
-              <div className="text-[11px] font-mono tabular-nums text-[#52615D] truncate">
-                {formatRupiah(baselineSnapshot.totalFiveYearBudgetRp, true)} →{' '}
-                {formatRupiah(scenarioFiveYearCostRp, true)}
-              </div>
-            </div>
-
-            <div className="p-4 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-1 min-w-0">
-              <div className="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-[#52615D]">
-                <span className="truncate">Kemantapan Thn 5</span>
-                {stabilityDeltaPct >= 0 ? (
-                  <TrendingUp className="w-4 h-4 text-emerald-700 shrink-0" strokeWidth={1.75} />
-                ) : (
-                  <TrendingDown className="w-4 h-4 text-rose-700 shrink-0" strokeWidth={1.75} />
-                )}
-              </div>
-              <div
-                className={`text-lg xl:text-xl font-bold font-mono tabular-nums tracking-tight whitespace-nowrap truncate ${
-                  stabilityDeltaPct > 0
-                    ? 'text-emerald-800'
-                    : stabilityDeltaPct < 0
-                    ? 'text-rose-700'
-                    : 'text-[#172B2A]'
-                }`}
-              >
-                {stabilityDeltaPct > 0
-                  ? `+${stabilityDeltaPct.toFixed(2)}%`
-                  : `${stabilityDeltaPct.toFixed(2)}%`}
-              </div>
-              <div className="text-[11px] font-mono tabular-nums text-[#52615D] truncate">
-                Baseline {baselineSnapshot.stabilityYear5Pct.toFixed(1)}% → Skenario{' '}
-                {scenarioYear5StabilityPct.toFixed(1)}%
-              </div>
-            </div>
-
-            <div className="p-4 bg-white border border-[#D9DFDA] rounded-xl shadow-xs space-y-1 min-w-0">
-              <div className="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-[#52615D]">
-                <span className="truncate">Kebutuhan Tahun 1</span>
-                <BookmarkCheck className="w-4 h-4 text-[#17635C] shrink-0" strokeWidth={1.75} />
-              </div>
-              <div className="text-lg xl:text-xl font-bold font-mono tabular-nums tracking-tight text-[#172B2A] whitespace-nowrap truncate">
-                {formatRupiah(scenarioImmediateCostRp, true)}
-              </div>
-              <div
-                className={`text-[11px] font-mono tabular-nums font-medium truncate ${
-                  isWithinCap ? 'text-emerald-800' : 'text-rose-700'
-                }`}
-              >
-                {isWithinCap
-                  ? `Sisa Pagu: ${formatRupiah(budgetCapRp - scenarioImmediateCostRp, true)}`
-                  : `Defisit: ${formatRupiah(scenarioImmediateCostRp - budgetCapRp, true)}`}
-              </div>
-            </div>
-          </div>
-
           {/* Segment Cost Comparison Table */}
           <div className="space-y-3">
             <h3 className="text-base font-semibold text-[#172B2A]">

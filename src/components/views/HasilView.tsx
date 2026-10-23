@@ -350,16 +350,16 @@ export const HasilView: React.FC<HasilViewProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
           <div>
             <span className="text-xs uppercase tracking-wider text-[#52615D] block">
               Total Panjang Dianalisis
             </span>
-            <span className="text-xl font-bold font-mono tabular-nums text-[#172B2A] mt-0.5 block">
-              {snapshot.totalAnalyzedLengthM} m ({(snapshot.totalAnalyzedLengthM / 1000).toFixed(3)} km)
+            <span className="text-xl font-bold font-mono tabular-nums text-[#172B2A] whitespace-nowrap mt-0.5 block">
+              {snapshot.totalAnalyzedLengthM} m
             </span>
             <span className="text-xs text-[#52615D] font-mono tabular-nums">
-              Lebar {snapshot.widthM.toFixed(1)} m · {snapshot.segmentEvaluations.length} segmen
+              {(snapshot.totalAnalyzedLengthM / 1000).toFixed(3).replace('.', ',')} km · Lebar {snapshot.widthM.toFixed(1).replace('.', ',')} m · {snapshot.segmentEvaluations.length} segmen
             </span>
           </div>
 
@@ -367,7 +367,7 @@ export const HasilView: React.FC<HasilViewProps> = ({
             <span className="text-xs uppercase tracking-wider text-[#52615D] block">
               Rata-rata Tertimbang SDI
             </span>
-            <span className="text-xl font-bold font-mono tabular-nums text-[#172B2A] mt-0.5 block">
+            <span className="text-xl font-bold font-mono tabular-nums text-[#172B2A] whitespace-nowrap mt-0.5 block">
               {snapshot.weightedAvgSdi.toFixed(2)}
             </span>
             <span className="text-xs text-[#52615D] font-mono tabular-nums">
@@ -379,7 +379,7 @@ export const HasilView: React.FC<HasilViewProps> = ({
             <span className="text-xs uppercase tracking-wider text-[#52615D] block">
               Indeks Korelasi Pearson (SDI–IRI)
             </span>
-            <span className="text-xl font-bold font-mono tabular-nums text-[#17635C] mt-0.5 block">
+            <span className="text-xl font-bold font-mono tabular-nums text-[#17635C] whitespace-nowrap mt-0.5 block">
               r = {snapshot.pearsonCorrelationIri.toFixed(3)}
             </span>
             <span className="text-xs text-[#52615D]">
@@ -391,7 +391,7 @@ export const HasilView: React.FC<HasilViewProps> = ({
             <span className="text-xs uppercase tracking-wider text-[#52615D] block">
               Total Kebutuhan Anggaran 5 Tahun
             </span>
-            <span className="text-xl font-bold font-mono tabular-nums text-[#172B2A] mt-0.5 block">
+            <span className="text-xl font-bold font-mono tabular-nums text-[#172B2A] whitespace-nowrap mt-0.5 block">
               {formatRupiah(snapshot.totalFiveYearBudgetRp)}
             </span>
             <span className="text-xs text-[#52615D] font-mono tabular-nums">
@@ -412,14 +412,14 @@ export const HasilView: React.FC<HasilViewProps> = ({
           role="tab"
           aria-selected={activeTab === 'markov'}
           onClick={() => setActiveTab('markov')}
-          className={`flex-1 min-w-[165px] px-3.5 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
+          className={`flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
             activeTab === 'markov'
               ? 'bg-[#17635C] text-white'
               : 'text-[#52615D] hover:bg-[#F4F5F1] hover:text-[#172B2A]'
           }`}
         >
           <BarChart3 className="w-4 h-4 shrink-0" strokeWidth={1.75} />
-          <span>1. Prediksi Kondisi (Markov)</span>
+          <span>1. Prediksi Markov</span>
         </button>
 
         <button
@@ -427,7 +427,7 @@ export const HasilView: React.FC<HasilViewProps> = ({
           role="tab"
           aria-selected={activeTab === 'warning'}
           onClick={() => setActiveTab('warning')}
-          className={`flex-1 min-w-[165px] px-3.5 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
+          className={`flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
             activeTab === 'warning'
               ? 'bg-[#17635C] text-white'
               : 'text-[#52615D] hover:bg-[#F4F5F1] hover:text-[#172B2A]'
@@ -442,14 +442,14 @@ export const HasilView: React.FC<HasilViewProps> = ({
           role="tab"
           aria-selected={activeTab === 'prioritas'}
           onClick={() => setActiveTab('prioritas')}
-          className={`flex-1 min-w-[165px] px-3.5 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
+          className={`flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
             activeTab === 'prioritas'
               ? 'bg-[#17635C] text-white'
               : 'text-[#52615D] hover:bg-[#F4F5F1] hover:text-[#172B2A]'
           }`}
         >
           <MapPin className="w-4 h-4 shrink-0" strokeWidth={1.75} />
-          <span>3. Prioritas & Peta Strip STA</span>
+          <span>3. Prioritas & Peta STA</span>
         </button>
 
         <button
@@ -457,7 +457,7 @@ export const HasilView: React.FC<HasilViewProps> = ({
           role="tab"
           aria-selected={activeTab === 'program'}
           onClick={() => setActiveTab('program')}
-          className={`flex-1 min-w-[165px] px-3.5 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
+          className={`flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
             activeTab === 'program'
               ? 'bg-[#17635C] text-white'
               : 'text-[#52615D] hover:bg-[#F4F5F1] hover:text-[#172B2A]'
@@ -472,14 +472,14 @@ export const HasilView: React.FC<HasilViewProps> = ({
           role="tab"
           aria-selected={activeTab === 'biaya'}
           onClick={() => setActiveTab('biaya')}
-          className={`flex-1 min-w-[165px] px-3.5 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
+          className={`flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
             activeTab === 'biaya'
               ? 'bg-[#17635C] text-white'
               : 'text-[#52615D] hover:bg-[#F4F5F1] hover:text-[#172B2A]'
           }`}
         >
           <Calendar className="w-4 h-4 shrink-0" strokeWidth={1.75} />
-          <span>5. Rencana Biaya Multi-Tahun</span>
+          <span>5. Biaya & Jadwal</span>
         </button>
       </div>
 

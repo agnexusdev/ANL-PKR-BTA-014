@@ -253,42 +253,42 @@ export const LaporanView: React.FC<LaporanViewProps> = ({
             <h3 className="text-sm font-bold uppercase tracking-wider text-[#172B2A] border-b border-[#D9DFDA] pb-1.5">
               03. Proyeksi Kondisi Rantai Markov & Rencana Anggaran 5 Tahun
             </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-6">
               <div className="border border-[#D9DFDA] rounded-lg overflow-hidden">
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
                     <tr className="bg-[#F4F5F1] border-b border-[#D9DFDA]">
-                      <th className="py-2 px-2.5 font-semibold text-[#52615D]">Tahun</th>
-                      <th className="py-2 px-2.5 text-right font-semibold text-[#52615D]">
+                      <th className="py-2.5 px-3 font-semibold text-[#52615D]">Tahun</th>
+                      <th className="py-2.5 px-3 text-right font-semibold text-[#52615D]">
                         Baik
                       </th>
-                      <th className="py-2 px-2.5 text-right font-semibold text-[#52615D]">
+                      <th className="py-2.5 px-3 text-right font-semibold text-[#52615D]">
                         Sedang
                       </th>
-                      <th className="py-2 px-2.5 text-right font-semibold text-[#52615D]">
-                        R. Ringan
+                      <th className="py-2.5 px-3 text-right font-semibold text-[#52615D]">
+                        Rusak Ringan
                       </th>
-                      <th className="py-2 px-2.5 text-right font-semibold text-[#52615D]">
-                        R. Berat
+                      <th className="py-2.5 px-3 text-right font-semibold text-[#52615D]">
+                        Rusak Berat
                       </th>
-                      <th className="py-2 px-2.5 text-right font-semibold text-[#52615D]">
-                        Mantap
+                      <th className="py-2.5 px-3 text-right font-semibold text-[#52615D]">
+                        Kemantapan (%)
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#D9DFDA] font-mono tabular-nums">
                     {snapshot.markovProjections.map((m) => (
                       <tr key={m.calendarYear}>
-                        <td className="py-2 px-2.5 font-semibold">{m.calendarYear}</td>
-                        <td className="py-2 px-2.5 text-right">{m.proportions.Baik.toFixed(1)}%</td>
-                        <td className="py-2 px-2.5 text-right">{m.proportions.Sedang.toFixed(1)}%</td>
-                        <td className="py-2 px-2.5 text-right">
+                        <td className="py-2 px-3 font-semibold">{m.calendarYear}</td>
+                        <td className="py-2 px-3 text-right">{m.proportions.Baik.toFixed(1)}%</td>
+                        <td className="py-2 px-3 text-right">{m.proportions.Sedang.toFixed(1)}%</td>
+                        <td className="py-2 px-3 text-right">
                           {m.proportions['Rusak Ringan'].toFixed(1)}%
                         </td>
-                        <td className="py-2 px-2.5 text-right">
+                        <td className="py-2 px-3 text-right">
                           {m.proportions['Rusak Berat'].toFixed(1)}%
                         </td>
-                        <td className="py-2 px-2.5 text-right font-bold text-[#17635C]">
+                        <td className="py-2 px-3 text-right font-bold text-[#17635C]">
                           {m.stabilityIndexPct.toFixed(1)}%
                         </td>
                       </tr>
@@ -427,7 +427,7 @@ export const LaporanView: React.FC<LaporanViewProps> = ({
                     src={item.url}
                     alt={item.caption}
                     referrerPolicy="no-referrer"
-                    className="w-full h-44 object-cover border-b border-[#D9DFDA]"
+                    className="w-full aspect-[5/3] object-contain bg-[#172B2A] border-b border-[#D9DFDA]"
                   />
                   <div className="p-3 bg-[#F4F5F1]/50 text-xs space-y-0.5">
                     <div className="font-mono font-bold text-[#172B2A] tabular-nums">

@@ -2,13 +2,72 @@ import {
   ConditionClass,
   JalanBetaStoreState,
   RoadRuas,
+  RoadSegment,
   SavedScenario,
 } from '../types/jalan';
 import {
   buildAnalysisSnapshot,
+  calculateSDI,
   DEFAULT_MARKOV_MATRIX,
   DEFAULT_UNIT_COSTS,
 } from '../utils/calculations';
+
+function escapeXml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+/**
+ * Clean helper that creates a properly encoded road surface SVG diagram data URL
+ * using XML entity escaping + encodeURIComponent(svgString).
+ */
+export function createRoadSvgDataUrl(
+  staLabel: string,
+  condition: string,
+  detailText: string
+): string {
+  const normalizedCondition: ConditionClass =
+    condition === 'Baik' ||
+    condition === 'Sedang' ||
+    condition === 'Rusak Ringan' ||
+    condition === 'Rusak Berat'
+      ? condition
+      : 'Sedang';
+
+  return createRoadDistressSvgDataUrl({
+    staLabel,
+    condition: normalizedCondition,
+    caption: detailText,
+    crackPct:
+      normalizedCondition === 'Rusak Berat'
+        ? 38
+        : normalizedCondition === 'Rusak Ringan'
+        ? 24
+        : normalizedCondition === 'Sedang'
+        ? 16
+        : 4,
+    potholes:
+      normalizedCondition === 'Rusak Berat'
+        ? 5
+        : normalizedCondition === 'Rusak Ringan'
+        ? 14
+        : normalizedCondition === 'Sedang'
+        ? 3
+        : 0,
+    ruttingCm:
+      normalizedCondition === 'Rusak Berat'
+        ? 3.6
+        : normalizedCondition === 'Rusak Ringan'
+        ? 2.4
+        : normalizedCondition === 'Sedang'
+        ? 1.4
+        : 0.6,
+  });
+}
 
 /**
  * Generates a high-contrast engineering SVG illustration of road surface distress
@@ -31,7 +90,13 @@ export function createRoadDistressSvgDataUrl(params: {
     'Rusak Berat': { bg: '#FFF1F2', stroke: '#FECDD3', text: '#9F1239' },
   };
 
-  const c = badgeColors[condition];
+  const c = badgeColors[condition] || badgeColors.Sedang;
+  const safeSta = escapeXml(staLabel);
+  const safeCaption = escapeXml(caption);
+  const safeCondition = escapeXml(condition);
+  const safeDetail = escapeXml(
+    `Retak: ${crackPct}% | Lubang: ${potholes} ttk | Rutting: ${ruttingCm} cm`
+  );
 
   // Distress visual overlays based on severity
   const crackPaths =
@@ -71,30 +136,23 @@ export function createRoadDistressSvgDataUrl(params: {
         <stop offset="100%" stop-color="#334155"/>
       </linearGradient>
     </defs>
-    <!-- Sky & Horizon -->
     <rect width="600" height="100" fill="url(#sky)"/>
-    <!-- Road Shoulders -->
     <polygon points="0,100 600,100 600,360 0,360" fill="#CBD5E1"/>
     <polygon points="0,100 180,100 65,275 0,275" fill="#94A3B8"/>
     <polygon points="420,100 600,100 600,275 535,275" fill="#94A3B8"/>
-    <!-- Asphalt Trapezoid -->
     <polygon points="160,95 440,95 540,275 60,275" fill="url(#asphalt)"/>
-    <!-- Edge & Center Markings -->
     <line x1="172" y1="95" x2="82" y2="275" stroke="#F8FAFC" stroke-width="3" stroke-opacity="0.8"/>
     <line x1="428" y1="95" x2="518" y2="275" stroke="#F8FAFC" stroke-width="3" stroke-opacity="0.8"/>
     <line x1="300" y1="98" x2="300" y2="272" stroke="#FBBF24" stroke-width="4" stroke-dasharray="18 14"/>
-    <!-- Rutting & Distress Overlays -->
     ${ruttingTracks}
     ${crackPaths}
     ${potholeShapes}
-    <!-- Bottom Technical Telemetry Bar -->
     <rect x="0" y="275" width="600" height="85" fill="#172B2A"/>
-    <text x="20" y="305" fill="#FFFFFF" font-family="monospace" font-size="15" font-weight="bold">STA ${staLabel}</text>
-    <text x="20" y="328" fill="#A7F3D0" font-family="sans-serif" font-size="12">${caption}</text>
-    <text x="20" y="347" fill="#94A3B8" font-family="monospace" font-size="11">Retak: ${crackPct}% | Lubang: ${potholes} ttk | Rutting: ${ruttingCm} cm</text>
-    <!-- Condition Pill -->
+    <text x="20" y="305" fill="#FFFFFF" font-family="monospace" font-size="15" font-weight="bold">STA ${safeSta}</text>
+    <text x="20" y="328" fill="#A7F3D0" font-family="sans-serif" font-size="12">${safeCaption}</text>
+    <text x="20" y="347" fill="#94A3B8" font-family="monospace" font-size="11">${safeDetail}</text>
     <rect x="440" y="292" width="140" height="32" rx="16" fill="${c.bg}" stroke="${c.stroke}" stroke-width="1.5"/>
-    <text x="510" y="313" fill="${c.text}" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">${condition}</text>
+    <text x="510" y="313" fill="${c.text}" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">${safeCondition}</text>
   </svg>`;
 
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
@@ -323,3 +381,54 @@ export function createInitialStoreState(): JalanBetaStoreState {
     defaultUnitCosts: DEFAULT_UNIT_COSTS,
   };
 }
+
+function sanitizeSegmentsSvgUrls(segments: RoadSegment[]): RoadSegment[] {
+  return segments.map((seg) => {
+    const sdi = calculateSDI({
+      crackAreaPct: seg.crackAreaPct,
+      crackWidthMm: seg.crackWidthMm,
+      potholeCount: seg.potholeCount,
+      ruttingDepthCm: seg.ruttingDepthCm,
+      segmentLengthM: seg.lengthM,
+    });
+    const sanitizedPhotos = (seg.photos || []).map((photo) => {
+      if (photo.url && photo.url.startsWith('data:image/svg+xml')) {
+        return {
+          ...photo,
+          url: createRoadDistressSvgDataUrl({
+            staLabel: seg.staLabel,
+            condition: sdi.condition,
+            caption: photo.caption || `STA ${seg.staLabel}`,
+            crackPct: seg.crackAreaPct,
+            potholes: seg.potholeCount,
+            ruttingCm: seg.ruttingDepthCm,
+          }),
+        };
+      }
+      return photo;
+    });
+    return {
+      ...seg,
+      photos: sanitizedPhotos,
+    };
+  });
+}
+
+/**
+ * Ensures any persisted localStorage state from an earlier build has valid XML-escaped
+ * and URI-encoded SVG data URLs across both ruasList and analysisHistory snapshots.
+ */
+export function sanitizeStoreSvgUrls(state: JalanBetaStoreState): JalanBetaStoreState {
+  return {
+    ...state,
+    ruasList: (state.ruasList || []).map((ruas) => ({
+      ...ruas,
+      segments: sanitizeSegmentsSvgUrls(ruas.segments || []),
+    })),
+    analysisHistory: (state.analysisHistory || []).map((snap) => ({
+      ...snap,
+      frozenSegments: sanitizeSegmentsSvgUrls(snap.frozenSegments || []),
+    })),
+  };
+}
+

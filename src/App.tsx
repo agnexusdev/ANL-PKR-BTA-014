@@ -9,7 +9,7 @@ import {
   UnitCostConfig,
   ViewRoute,
 } from './types/jalan';
-import { createInitialStoreState } from './data/initialData';
+import { createInitialStoreState, sanitizeStoreSvgUrls } from './data/initialData';
 import { buildAnalysisSnapshot } from './utils/calculations';
 import { AppShell } from './components/ui/Primitives';
 import { RuasView } from './components/views/RuasView';
@@ -74,7 +74,9 @@ function loadStoreState(): JalanBetaStoreState {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
       return seed;
     }
-    return parsed;
+    const sanitized = sanitizeStoreSvgUrls(parsed);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+    return sanitized;
   } catch {
     return createInitialStoreState();
   }
